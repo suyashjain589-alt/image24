@@ -1,0 +1,35 @@
+name: Extract IMAGE 24 ZIP
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "IMAGE24-V18.1-FRESH-CLEAN.zip"
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract project ZIP
+        run: |
+          rm -rf extracted
+          mkdir extracted
+          unzip -q "IMAGE24-V18.1-FRESH-CLEAN.zip" -d extracted
+          cp -a extracted/image24/. .
+          rm -rf extracted
+          rm -f "IMAGE24-V18.1-FRESH-CLEAN.zip"
+
+      - name: Commit extracted project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Extract IMAGE 24 project"
+          git push
