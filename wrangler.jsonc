@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "image24",
+  "main": "worker.js",
+  "compatibility_date": "2026-08-20",
+  // After image24.in is attached to Cloudflare, you can enable this: 
+  // "routes": [{"pattern":"image24.in","custom_domain":true}],
+  "assets": {
+    "html_handling": "auto-trailing-slash",
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/health"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "image24-production",
+      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+    }
+  ],
+  "secrets": {
+    "required": ["AUTH_PEPPER"]
+  }
+}
