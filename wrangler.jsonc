@@ -15,7 +15,7 @@
     {
       "binding": "DB",
       "database_name": "image24-production",
-      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+      "database_id": "bba435c1-4b6c-442a-bd30-b9a18da5aece"
     }
   ],
   "secrets": {
