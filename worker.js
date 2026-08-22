@@ -1,5 +1,5 @@
 const JSON_HEADERS = {"content-type":"application/json; charset=utf-8","cache-control":"no-store"};
-const FREE_LIMIT = 10;
+const FREE_LIMIT = 1000;
 const PRO_LIMIT = 500;
 const MAX_FILE_BYTES = 50 * 1024 * 1024;
 
