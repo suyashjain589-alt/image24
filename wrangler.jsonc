@@ -17,8 +17,5 @@
       "database_name": "image24-production",
       "database_id": "bba435c1-4b6c-442a-bd30-b9a18da5aece"
     }
-  ],
-  "secrets": {
-    "required": ["AUTH_PEPPER"]
+  ]
   }
-}
