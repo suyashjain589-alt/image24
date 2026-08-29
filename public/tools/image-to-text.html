@@ -1,238 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image to Text Converter - IMAGE 24</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background: #f5f7fb;
-      color: #111827;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #6b7280;
-      margin-bottom: 25px;
-    }
-
-    .upload-box {
-      background: white;
-      border: 2px dashed #9ca3af;
-      border-radius: 14px;
-      padding: 30px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .upload-box input {
-      display: none;
-    }
-
-    .upload-button {
-      display: inline-block;
-      padding: 12px 22px;
-      background: #2563eb;
-      color: white;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #preview {
-      display: none;
-      max-width: 100%;
-      max-height: 450px;
-      margin: 25px auto;
-      border-radius: 10px;
-      border: 1px solid #ddd;
-    }
-
-    #status {
-      text-align: center;
-      margin: 15px 0;
-      font-weight: bold;
-    }
-
-    .result-box {
-      display: none;
-      background: white;
-      padding: 18px;
-      border-radius: 14px;
-      margin-top: 20px;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 250px;
-      padding: 15px;
-      font-size: 16px;
-      line-height: 1.6;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      resize: vertical;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: 0;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #copyBtn {
-      background: #16a34a;
-      color: white;
-    }
-
-    #clearBtn {
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image to Text Converter - IMAGE 24</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:#f5f7fb;color:#172033}
+.wrap{width:min(900px,calc(100% - 28px));margin:28px auto 50px}.card{background:#fff;border-radius:18px;padding:24px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+h1{margin:0 0 8px;font-size:clamp(25px,6vw,38px);text-align:center}.sub{text-align:center;color:#687386;margin:0 0 22px;line-height:1.5}
+.drop{border:2px dashed #9aa8bc;border-radius:16px;padding:28px 18px;text-align:center;cursor:pointer;background:#f9fbff;display:block}
+.drop.drag{border-color:#2563eb;background:#eff6ff}.drop strong{display:block;font-size:18px;margin-bottom:7px}.drop span{color:#6b7280;font-size:14px}
+input[type=file]{display:none}.preview{display:none;margin-top:22px}.preview img{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:12px;background:#f1f5f9;border:1px solid #e5e7eb}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}button{border:0;border-radius:10px;padding:12px 17px;font-size:15px;font-weight:700;cursor:pointer}
+#convertBtn{background:#2563eb;color:white;flex:1}#clearBtn{background:#e5e7eb;color:#172033}button:disabled{opacity:.55;cursor:not-allowed}
+.status{display:none;margin-top:16px;padding:12px 14px;border-radius:10px;background:#eef4ff;color:#2451a6;line-height:1.45;font-size:14px}
+.result{display:none;margin-top:24px}.result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.result-head h2{margin:0;font-size:20px}
+#copyBtn{background:#16a34a;color:white;padding:10px 14px}
+#downloadBtn{background:#2563eb;color:white;padding:10px 14px}textarea{width:100%;min-height:260px;resize:vertical;border:1px solid #cbd5e1;border-radius:12px;padding:15px;font-size:16px;line-height:1.6;font-family:Arial,"Noto Sans Devanagari",sans-serif;outline:none}
+textarea:focus{border-color:#2563eb}.hint{margin-top:8px;color:#7a8495;font-size:13px}.progress{display:none;margin-top:12px;height:9px;background:#e5e7eb;border-radius:99px;overflow:hidden}.bar{width:0%;height:100%;background:#2563eb;transition:width .2s}
+@media(max-width:600px){.wrap{margin-top:14px;width:calc(100% - 16px)}.card{padding:17px;border-radius:14px}.drop{padding:24px 12px}.result-head{align-items:flex-start;flex-direction:column}#copyBtn{width:100%}}
+</style>
 </head>
-
 <body>
-  <div class="container">
+<main class="wrap"><section class="card">
+<h1>Image to Text Converter</h1>
+<p class="sub">Upload an image and extract the text from it.<br>हिंदी और English दोनों text को copy करके Word, Excel या कहीं भी paste कर सकते हैं।</p>
 
-    <h1>Image to Text Converter</h1>
+<label class="drop" id="dropZone" for="imageInput">
+<strong>🖼️ Upload JPG, PNG or WebP</strong><span>JPG, JPEG, PNG और WebP images चुनें या यहाँ drag & drop करें</span>
+</label>
+<input id="imageInput" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">
 
-    <div class="subtitle">
-      Hindi + English text निकालें और आसानी से Copy करें
-    </div>
+<div class="preview" id="previewBox">
+<img id="previewImg" alt="Selected image preview">
+<div class="actions"><button id="convertBtn" disabled>Extract Text</button><button id="clearBtn" type="button">Clear</button></div>
+<div class="progress" id="progressBox"><div class="bar" id="progressBar"></div></div>
+<div class="status" id="status"></div>
+</div>
 
-    <label class="upload-box">
-      <span class="upload-button">📷 Upload Image</span>
-      <input type="file" id="imageInput" accept="image/*">
-      <p>JPG, PNG, WEBP आदि image upload करें</p>
-    </label>
+<div class="result" id="resultBox">
+<div class="result-head"><h2>Extracted Text</h2><button id="copyBtn" type="button">📋 Copy Text</button>
+<button id="downloadBtn" type="button">📥 Download TXT</button></div>
+<textarea id="resultText" placeholder="Extracted text will appear here..."></textarea>
+<div class="hint">Text को आप edit भी कर सकते हैं, फिर Copy Text दबाकर कहीं भी paste करें।</div>
+</div>
+</section></main>
 
-    <img id="preview" alt="Uploaded image">
+<script>
+(() => {
+const input=document.getElementById('imageInput'),dropZone=document.getElementById('dropZone'),previewBox=document.getElementById('previewBox'),previewImg=document.getElementById('previewImg'),convertBtn=document.getElementById('convertBtn'),clearBtn=document.getElementById('clearBtn'),resultBox=document.getElementById('resultBox'),resultText=document.getElementById('resultText'),copyBtn=document.getElementById('copyBtn'),status=document.getElementById('status'),progressBox=document.getElementById('progressBox'),progressBar=document.getElementById('progressBar');
+let selectedFile=null,worker=null;
+function msg(t,show=true){status.textContent=t;status.style.display=show?'block':'none'}
+function chooseFile(file){
+const allowed=['image/jpeg','image/png','image/webp'];
+if(!file||!allowed.includes(file.type)){msg('कृपया केवल JPG, PNG या WebP image upload करें।');return}
+selectedFile=file;previewImg.src=URL.createObjectURL(file);previewBox.style.display='block';convertBtn.disabled=false;resultBox.style.display='none';resultText.value='';msg('Image selected. अब "Extract Text" दबाएँ।')
+}
+input.addEventListener('change',e=>chooseFile(e.target.files[0]));
+['dragenter','dragover'].forEach(n=>dropZone.addEventListener(n,e=>{e.preventDefault();dropZone.classList.add('drag')}));
+['dragleave','drop'].forEach(n=>dropZone.addEventListener(n,e=>{e.preventDefault();dropZone.classList.remove('drag')}));
+dropZone.addEventListener('drop',e=>chooseFile(e.dataTransfer.files[0]));
+clearBtn.addEventListener('click',()=>{selectedFile=null;input.value='';previewImg.removeAttribute('src');previewBox.style.display='none';resultBox.style.display='none';resultText.value='';progressBox.style.display='none';msg('',false)});
+convertBtn.addEventListener('click',async()=>{
+if(!selectedFile)return;convertBtn.disabled=true;resultBox.style.display='none';progressBox.style.display='block';progressBar.style.width='0%';msg('OCR शुरू हो रहा है… पहली बार थोड़ा समय लग सकता है।');
+try{
+if(!worker)worker=await Tesseract.createWorker('eng+hin',1,{logger:m=>{if(m.status){let p=Math.round((m.progress||0)*100);progressBar.style.width=p+'%';msg(m.status+(p?' '+p+'%':''))}}});
+const r=await worker.recognize(selectedFile),text=(r.data.text||'').trim();resultText.value=text;
+if(!text)msg('Image में text नहीं मिला। साफ़ और high-quality image try करें।');else{resultBox.style.display='block';msg('Text successfully extracted. अब Copy Text दबाकर कहीं भी paste कर सकते हैं.')}
+progressBar.style.width='100%';
+}catch(e){console.error(e);msg('OCR में error आया। कृपया image दोबारा try करें या थोड़ी देर बाद फिर प्रयास करें।')}
+finally{convertBtn.disabled=false}
+});
+copyBtn.addEventListener('click',async()=>{
+if(!resultText.value)return;
+try{await navigator.clipboard.writeText(resultText.value)}catch{resultText.focus();resultText.select();document.execCommand('copy')}
+copyBtn.textContent='✅ Copied!';setTimeout(()=>copyBtn.textContent='📋 Copy Text',1500)
+});
 
-    <div id="status"></div>
-
-    <div class="result-box" id="resultBox">
-      <h3>📝 Extracted Text</h3>
-
-      <textarea id="textOutput"
-        placeholder="Image से निकला हुआ text यहाँ दिखाई देगा..."></textarea>
-
-      <div class="buttons">
-        <button id="copyBtn">📋 Copy Text</button>
-        <button id="clearBtn">🗑️ Clear</button>
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-    const imageInput = document.getElementById("imageInput");
-    const preview = document.getElementById("preview");
-    const status = document.getElementById("status");
-    const resultBox = document.getElementById("resultBox");
-    const textOutput = document.getElementById("textOutput");
-    const copyBtn = document.getElementById("copyBtn");
-    const clearBtn = document.getElementById("clearBtn");
-
-    imageInput.addEventListener("change", async function () {
-      const file = this.files[0];
-
-      if (!file) return;
-
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = "block";
-
-      resultBox.style.display = "block";
-      textOutput.value = "";
-      status.textContent = "⏳ Image पढ़ी जा रही है...";
-
-      try {
-        const worker = await Tesseract.createWorker("eng+hin");
-
-        const result = await worker.recognize(file);
-
-        textOutput.value = result.data.text.trim();
-
-        await worker.terminate();
-
-        if (textOutput.value) {
-          status.textContent = "✅ Text successfully extracted!";
-        } else {
-          status.textContent = "⚠️ Image में readable text नहीं मिला।";
-        }
-
-      } catch (error) {
-        console.error(error);
-        status.textContent =
-          "❌ Text निकालने में समस्या हुई। कृपया दूसरी image try करें।";
-      }
-    });
-
-    copyBtn.addEventListener("click", async function () {
-      if (!textOutput.value.trim()) return;
-
-      try {
-        await navigator.clipboard.writeText(textOutput.value);
-        copyBtn.textContent = "✅ Copied!";
-        
-        setTimeout(() => {
-          copyBtn.textContent = "📋 Copy Text";
-        }, 1500);
-
-      } catch (error) {
-        textOutput.select();
-        document.execCommand("copy");
-        copyBtn.textContent = "✅ Copied!";
-
-        setTimeout(() => {
-          copyBtn.textContent = "📋 Copy Text";
-        }, 1500);
-      }
-    });
-
-    clearBtn.addEventListener("click", function () {
-      imageInput.value = "";
-      preview.src = "";
-      preview.style.display = "none";
-      textOutput.value = "";
-      resultBox.style.display = "none";
-      status.textContent = "";
-    });
-  </script>
-
+document.getElementById('downloadBtn').addEventListener('click',()=>{
+const text=resultText.value;
+if(!text.trim())return;
+const blob=new Blob([text],{type:'text/plain;charset=utf-8'});
+const url=URL.createObjectURL(blob);
+const a=document.createElement('a');
+a.href=url;
+a.download='image24-extracted-text.txt';
+document.body.appendChild(a);
+a.click();
+a.remove();
+URL.revokeObjectURL(url);
+});
+})();
+</script>
 </body>
 </html>
