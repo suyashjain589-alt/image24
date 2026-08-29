@@ -16,7 +16,5 @@
       "database_id": "37ce9012-b0e5-4201-a79c-682900b34288"
     }
   ],
-  "secrets": {
-    "required": ["AUTH_PEPPER"]
-  }
+  
 }
